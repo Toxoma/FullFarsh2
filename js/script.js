@@ -1,36 +1,49 @@
 "use strict";
+
 let isNumber = function (n) {
-   return !isNaN(parseFloat(n)) && isFinite(n) && +n >= 1 && +n <= 100;
+   const a = !isNaN(parseFloat(n)) && isFinite(n) && +n >= 1 && +n <= 100;
+   if(!a){
+      alert('Введи число!');
+   }
+   return a;
 };
 
-let y;
-
-do {
-   y = prompt('Загадывание случайного числа от 1 до 100');
-} while (!isNumber(y));
-
-let x;
-
-function chislo() {
-
+function start(){
+   let y;
    do {
-      x = prompt('Угадай число от 1 до 100');
-   } while (!isNumber(x));
-}
+      y = prompt('Загадывание случайного числа от 1 до 100');
+      if(y===null){
+         return  alert('Игра окончена');
+      }
+   } while (!isNumber(y));
 
-chislo();
+   function chislo() {
+      let x;
+      do {
+         x = prompt('Угадай число от 1 до 100');
+         if(x===null){
+            return  alert('Игра окончена');
+         }
+      } while (!isNumber(x));
 
-if (x > y) {
-   alert("Загаданное число меньше");
+      if (+x > +y) {
+         alert("Загаданное число меньше");
+         chislo();
+      }
+      if (+x < +y) {
+         alert("Загаданное число больше");
+         chislo();
+      }
+      if(x===y){
+         alert('Поздравляю, Вы угадали!!!');
+      }
+   }
+
    chislo();
-}
-if (x < y) {
-   alert("Загаданное число больше");
-   chislo();
+   
 }
 
-
-
+start();
 
 
 
