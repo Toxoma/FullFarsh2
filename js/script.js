@@ -1,51 +1,38 @@
 "use strict";
 
-let isNumber = function (n) {
-   const a = !isNaN(parseFloat(n)) && isFinite(n) && +n >= 1 && +n <= 100;
-   if(!a){
-      alert('Введи число!');
-   }
-   return a;
-};
+const wrap = document.querySelector('.wrapper');
 
-function start(){
-   let y;
-   do {
-      y = prompt('Загадывание случайного числа от 1 до 100');
-      if(y===null){
-         return  alert('Игра окончена');
-      }
-   } while (!isNumber(y));
-
-   function chislo() {
-      let x;
-      do {
-         x = prompt('Угадай число от 1 до 100');
-         if(x===null){
-            return  alert('Игра окончена');
-         }
-      } while (!isNumber(x));
-
-      if (+x > +y) {
-         alert("Загаданное число меньше");
-         chislo();
-      }
-      if (+x < +y) {
-         alert("Загаданное число больше");
-         chislo();
-      }
-      if(x===y){
-         alert('Поздравляю, Вы угадали!!!');
-      }
-   }
-
-   chislo();
-   
+function DomElement(selector, height, width, bg, fontSize) {
+   this.selector = selector;
+   this.height = height;
+   this.width = width;
+   this.bg = bg;
+   this.fontSize = fontSize;
 }
 
-start();
+DomElement.prototype.create = function () {
+   let newDiv;
+   if (this.selector[0] === '.') {
+      newDiv = document.createElement('div');
+      newDiv.classList.add(this.selector.substr(1));
 
+      wrap.append(newDiv);
 
+   } else {
+      newDiv = document.createElement('p');
+      newDiv.setAttribute("id", this.selector.substr(1));
 
+      wrap.append(newDiv);
+   }
 
+   newDiv.style.width = this.width + 'px';
+   newDiv.style.height = this.height + 'px';
+   newDiv.style.backgroundColor = this.bg;
+   newDiv.style.fontSize = this.fontSize + 'px';
 
+   newDiv.textContent = 'Привет мир!';
+
+};
+
+let first = new DomElement('.abc', 300, 500, 'red', 34);
+first.create();
