@@ -1,80 +1,115 @@
 "use strict";
 
-const wrap = document.querySelector('.wrapper');
-let newDiv;
+const username = document.querySelector('#username'),
+   registerUser = document.querySelector('#registerUser'),
+   login = document.querySelector('#login'),
+   list = document.querySelector('#list');
 
-function DomElement(selector, height, width, bg, fontSize) {
-   this.selector = selector;
-   this.height = height;
-   this.width = width;
-   this.bg = bg;
-   this.fontSize = fontSize;
-   this.position = 'absolute';
-   this.top = 100;
-   this.left = 100;
-}
+let delBtns = document.querySelectorAll('.btn');
 
-DomElement.prototype.create = function () {
+let users = [
+   {
+      firstName: "das",
+      lastName: "d",
+      login: "dan",
+      password: "123",
+      regDate: "14 июня 2021 г., 14:20:5",
+   }
+];
 
+let user = {
+   firstName: '',
+   lastName: '',
+   login: '',
+   password: '',
+   regDate: '',
+};
 
-   if (this.selector[0] === '.') {
-      newDiv = document.createElement('div');
-      newDiv.classList.add(this.selector.substr(1));
+const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 
-      wrap.append(newDiv);
+let strNameFio;
 
-   } else {
-      newDiv = document.createElement('p');
-      newDiv.setAttribute("id", this.selector.substr(1));
+function getLocal() {
+   users = [];
 
-      wrap.append(newDiv);
+   for (let key in localStorage) {
+      if (!localStorage.hasOwnProperty(key)) {
+         continue;
+      }
+      let item = JSON.parse(localStorage[key]);
+      users.push(item);
    }
 
-   newDiv.style.width = this.width + 'px';
-   newDiv.style.height = this.height + 'px';
-   newDiv.style.backgroundColor = this.bg;
-   newDiv.style.fontSize = this.fontSize + 'px';
-   newDiv.style.position = this.position;
-   newDiv.style.top = this.top + 'px';
-   newDiv.style.left = this.left + 'px';
+   list.innerText = '';
+   users.forEach(item => {
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
 
-   newDiv.textContent = 'Привет мир!';
+      li.innerText = `Имя: ${item.firstName}, фамилия: ${item.lastName}, зарегистрирован: ${item.regDate}`;
 
-};
+      btn.textContent = 'удалить';
+      btn.classList.add('btn');
+      li.append(btn);
 
-DomElement.prototype.event = function () {
-   document.addEventListener('keydown', (e) => {
-      switch (e.key) {
-         case 'ArrowUp':
-            this.top = this.top - 10;
-            newDiv.style.top = this.top + 'px';
-            break;
-         case 'ArrowDown':
-            this.top = this.top + 10;
-            newDiv.style.top = this.top + 'px';
-            break;
-         case 'ArrowLeft':
-            this.left = this.left - 10;
-            newDiv.style.left = this.left + 'px';
-            break;
-         case 'ArrowRight':
-            this.left = this.left + 10;
-            newDiv.style.left = this.left + 'px';
-            break;
-      }
+      list.append(li);
+
+      btn.addEventListener('click', function () {
+         localStorage.removeItem(item.login);
+         getLocal();
+      });
    });
-};
+}
 
-let first = new DomElement('#abc', 100, 100, 'red', 16);
+function setLocal(key, mas) {
+   for (let item in localStorage) {
+      if (item === key) {
+         return;
+      }
+   }
 
-document.addEventListener('DOMContentLoaded', () => {
-   first.create();
-   first.event();
+   localStorage.setItem(key, JSON.stringify(mas));
+}
+
+registerUser.addEventListener('click', () => {
+   strNameFio = prompt('Введите через пробел Имя и Фамилию пользователя').split(' ');
+
+   if (strNameFio.length !== 2) {
+      alert('Ошибка ввода!!!');
+   } else {
+      let date = new Date();
+
+      user.firstName = strNameFio[0];
+      user.lastName = strNameFio[1];
+      user.login = prompt('Введите Логин');
+      user.password = prompt('Введите пароль');
+      user.regDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} г., ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+
+      users.push(user);
+      setLocal(user.login, user);
+      getLocal();
+   }
 });
 
+login.addEventListener('click', () => {
+   const login = prompt('Введите Логин');
+   const password = prompt('Введите пароль');
+   let count = true;
 
+   for (let key in localStorage) {
+      if (key === login) {
+         user = JSON.parse(localStorage[key]);
 
+         if (user.password === password) {
+            count = false;
+            username.textContent = user.login;
+         }
+      }
+   }
 
+   if (count) {
+      alert('Пользователь не найден');
+   }
+});
 
-
+getLocal();
 
