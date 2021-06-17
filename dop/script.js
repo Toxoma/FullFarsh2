@@ -1,4 +1,3 @@
-/* eslint-disable */
 
 window.addEventListener('DOMContentLoaded', () => {
    'use strict';
@@ -26,8 +25,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
          let seconds = Math.floor(timeRemaining % 60),
             minutes = Math.floor((timeRemaining / 60) % 60),
-            hours = Math.floor(timeRemaining / 60 / 60) % 24,
-            days = Math.floor(timeRemaining / 60 / 60 / 24);
+            hours = Math.floor(timeRemaining / 60 / 60) % 24;
+         const days = Math.floor(timeRemaining / 60 / 60 / 24);
 
          function putZero(value) {
             value += '';
@@ -46,6 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
          return { timeRemaining, seconds, minutes, hours, days, weekDay };
       }
 
+      // eslint-disable-next-line prefer-const
       let interval;
 
       function updateClock() {
