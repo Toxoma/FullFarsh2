@@ -53,18 +53,17 @@ window.addEventListener('DOMContentLoaded', () => {
       interval = setInterval(updateClock, 1000);
    }
 
-   countTimer('18 june 2021');
+   countTimer('18 june 2022');
 
 
    //!menu
-   
-   
+   const menu = document.querySelector('menu'),
+      menuItems = menu.querySelectorAll('ul>li>a');
+
    const toggleMenu = () => {
       const btnMenu = document.querySelector('.menu'),
-         menu = document.querySelector('menu'),
-         closeBtn = document.querySelector('.close-btn'),
-         menuItems = menu.querySelectorAll('ul>li>a');
-      
+         closeBtn = document.querySelector('.close-btn');
+         
         let count=-50,
        intervalMenu;
 
@@ -102,10 +101,6 @@ window.addEventListener('DOMContentLoaded', () => {
     toggleMenu();
    }
 
-
-
-
-
    //!popup
    const togglePopUp = () => {
       const popup = document.querySelector('.popup'),
@@ -124,7 +119,37 @@ window.addEventListener('DOMContentLoaded', () => {
    togglePopUp();
 
 
+   //!scroll
+   const scrollImg = document.querySelector('main>a>img'),
+       blocks = document.querySelectorAll('body>div[id]:not(#companies)');
+   //825
+
+   let findScroll = function(value) {
+
+
+      let count = document.documentElement.scrollTop,
+         scrollInterval;
+      
+      let animateScroll = () => {
+         scrollInterval = requestAnimationFrame(animateScroll);
+         if (count < value.offsetTop) {
+            count += 40;
+            document.documentElement.scrollTop = count;
+         } else {
+            cancelAnimationFrame(scrollInterval);
+         }
+      };
+
+      scrollInterval = requestAnimationFrame(animateScroll);
+
+   };
+
+   scrollImg.addEventListener('click', findScroll.bind(null,blocks[0]));
    
+   for (let index = 0; index < 5; index++) {
+      menuItems[index].addEventListener('click', findScroll.bind(null, blocks[index]));
+   }
+
 });
 
 
