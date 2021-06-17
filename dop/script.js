@@ -23,9 +23,9 @@ window.addEventListener('DOMContentLoaded', () => {
             weekDay = weekDays[dateNow.getDay()],
             timeRemaining = (dateStop - dateNow.getTime()) / 1000;
 
-         let seconds = Math.floor(timeRemaining % 60),
-            minutes = Math.floor((timeRemaining / 60) % 60),
-            hours = Math.floor(timeRemaining / 60 / 60) % 24;
+         let seconds = dateNow.getSeconds(),
+            minutes = dateNow.getMinutes(),
+            hours = dateNow.getHours();
          const days = Math.floor(timeRemaining / 60 / 60 / 24);
 
          function putZero(value) {
@@ -50,8 +50,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
       function updateClock() {
          const timer = getTimeRemaining();
-
-         console.log(timer);
 
          newYear.textContent = timer.days;
          day.textContent = timer.weekDay;
