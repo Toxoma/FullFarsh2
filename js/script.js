@@ -103,17 +103,23 @@ window.addEventListener('DOMContentLoaded', () => {
 
    //!popup
    const togglePopUp = () => {
+
       const popup = document.querySelector('.popup'),
          popupBtns = document.querySelectorAll('.popup-btn'),
          popupClose = document.querySelector('.popup-close');
+      
+      popup.style.transition = '1s';
+      popup.style.display = 'block';
+      popup.style.transform = 'translateY(-100%)';
 
       popupBtns.forEach(btn => btn.addEventListener('click', () => {
-         popup.style.display = 'block';
+         popup.style.transform = 'translateY(0%)';
       }));
 
       popupClose.addEventListener('click', () => {
-         popup.style.display = 'none';
+         popup.style.transform = 'translateY(-100%)';
       });
+
    };
 
    togglePopUp();
