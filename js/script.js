@@ -92,15 +92,12 @@ window.addEventListener('DOMContentLoaded', () => {
       };
 
 
-      let size = document.documentElement.clientWidth;
+      let size = window.innerWidth;
 
       let sizeIf = () => {
-         console.log(size);
-         console.dir(window);
-         console.dir(window.innerWidth);
 
-         if (size !== document.documentElement.clientWidth) {
-            size = document.documentElement.clientWidth;
+         if (size !== window.innerWidth) {
+            size = window.innerWidth;
             btnMenu.removeEventListener('click', event);
             closeMenu();
             sizeIf();
