@@ -58,7 +58,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
    //!menu
    const menu = document.querySelector('menu'),
-      menuItems = menu.querySelectorAll('ul>li>a');
+      menuItems = menu.querySelectorAll('ul>li>a'),
+      body = document.querySelector('body');
 
    const toggleMenu = () => {
       const btnMenu = document.querySelector('.menu'),
@@ -93,7 +94,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
       let size = document.documentElement.clientWidth;
 
-      let sizeIf = ()=> {
+      let sizeIf = () => {
+         console.log(size);
+         console.dir(window);
+         console.dir(window.innerWidth);
+
          if (size !== document.documentElement.clientWidth) {
             size = document.documentElement.clientWidth;
             btnMenu.removeEventListener('click', event);
