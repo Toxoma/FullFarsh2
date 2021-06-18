@@ -90,34 +90,59 @@ window.addEventListener('DOMContentLoaded', () => {
          }
       };
 
-      btnMenu.addEventListener('click', event);
+
+      let size = document.documentElement.clientWidth;
+
+      let sizeIf = ()=> {
+         if (size !== document.documentElement.clientWidth) {
+            size = document.documentElement.clientWidth;
+            btnMenu.removeEventListener('click', event);
+            closeMenu();
+            sizeIf();
+         } else {
+            if (size >= 768) {
+               btnMenu.addEventListener('click', event);
+            }
+         }
+      };
+
+
+      window.addEventListener('resize', sizeIf);
+
+      window.addEventListener('load', sizeIf);
+
 
       closeBtn.addEventListener('click', closeMenu);
       menuItems.forEach(elem => elem.addEventListener('click', closeMenu));
 
    };
    
-   if (document.documentElement.clientWidth >= 768) {
+
     toggleMenu();
-   }
+   
 
    //!popup
    const togglePopUp = () => {
 
       const popup = document.querySelector('.popup'),
+         popupContent = document.querySelector('.popup-content'),
          popupBtns = document.querySelectorAll('.popup-btn'),
          popupClose = document.querySelector('.popup-close');
       
-      popup.style.transition = '1s';
+      popupContent.style.transition = '1s';
       popup.style.display = 'block';
       popup.style.transform = 'translateY(-100%)';
+      popupContent.style.transform = 'translateX(-100%)';
+   
 
       popupBtns.forEach(btn => btn.addEventListener('click', () => {
+         popupContent.style.transform = 'translateX(0%)';
          popup.style.transform = 'translateY(0%)';
       }));
 
       popupClose.addEventListener('click', () => {
          popup.style.transform = 'translateY(-100%)';
+         popupContent.style.transform = 'translateX(-100%)';
       });
 
    };
