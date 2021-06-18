@@ -58,8 +58,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
    //!menu
    const menu = document.querySelector('menu'),
-      menuItems = menu.querySelectorAll('ul>li>a'),
-      body = document.querySelector('body');
+      menuItems = menu.querySelectorAll('ul>li>a');
 
    const toggleMenu = () => {
       const btnMenu = document.querySelector('.menu'),
@@ -83,43 +82,46 @@ window.addEventListener('DOMContentLoaded', () => {
          count = -50;
       };
 
-      let event = () => {
-         if (menu.style.transform && menu.style.transform === `translate(0%)`) {
-            closeMenu();
-         } else {
-            intervalMenu = requestAnimationFrame(handlerAnimate);
-         }
-      };
-
-
-      let size = window.innerWidth;
-
-      let sizeIf = () => {
-
-         if (size !== window.innerWidth) {
-            size = window.innerWidth;
-            btnMenu.removeEventListener('click', event);
-            closeMenu();
-            sizeIf();
-         } else {
-            if (size >= 768) {
-               btnMenu.addEventListener('click', event);
+      let eventAnim = () => {
+            if (menu.style.transform && menu.style.transform === `translate(0%)`) {
+               closeMenu();
+            } else {
+               intervalMenu = requestAnimationFrame(handlerAnimate);
             }
+      };
+      let eventWithoutAnim = () => {
+            if (menu.style.transform && menu.style.transform === `translate(0%)`) {
+               closeMenu();
+            } else {
+               menu.style.transform = `translate(0%)`;
+               count = -50;
          }
       };
 
+      let timoutsMenu = [];
 
-      window.addEventListener('resize', sizeIf);
+      let sizeMenu = () => {
+         timoutsMenu.push(setTimeout(() => {
+            timoutsMenu.forEach(item => clearTimeout(item));
+            
+            if (window.innerWidth >= 768) {
+               btnMenu.removeEventListener('click', eventWithoutAnim);
+               btnMenu.addEventListener('click', eventAnim);
+            } else {
+               btnMenu.removeEventListener('click', eventAnim);
+               btnMenu.addEventListener('click', eventWithoutAnim);
+            }
+         }, 500));
+      };
 
-      window.addEventListener('load', sizeIf);
 
-
+      window.addEventListener('resize', sizeMenu);
+      window.addEventListener('load', sizeMenu);
       closeBtn.addEventListener('click', closeMenu);
       menuItems.forEach(elem => elem.addEventListener('click', closeMenu));
 
    };
    
-
     toggleMenu();
    
 
@@ -131,16 +133,34 @@ window.addEventListener('DOMContentLoaded', () => {
          popupBtns = document.querySelectorAll('.popup-btn'),
          popupClose = document.querySelector('.popup-close');
       
-      popupContent.style.transition = '1s';
       popup.style.display = 'block';
       popup.style.transform = 'translateY(-100%)';
       popupContent.style.transform = 'translateX(-100%)';
-   
 
-      popupBtns.forEach(btn => btn.addEventListener('click', () => {
-         popupContent.style.transform = 'translateX(0%)';
-         popup.style.transform = 'translateY(0%)';
-      }));
+      let popupTransition = (value) => {
+         popupContent.style.transition = `${value}`;
+
+         popupBtns.forEach(btn => btn.addEventListener('click', () => {
+            popupContent.style.transform = 'translateX(0%)';
+            popup.style.transform = 'translateY(0%)';
+         }));
+      };
+
+      let timoutsPopup = [];
+      let sizePopup= () => {
+         timoutsPopup.push(setTimeout(() => {
+            timoutsPopup.forEach(item => clearTimeout(item));
+            
+            if (window.innerWidth >= 768) {
+         popupTransition('1s');
+      } else {
+         popupTransition('');
+      }
+         }, 500));
+      };
+
+      sizePopup();
+      window.addEventListener('resize', sizePopup);
 
       popupClose.addEventListener('click', () => {
          popup.style.transform = 'translateY(-100%)';
