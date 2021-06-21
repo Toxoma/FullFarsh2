@@ -58,14 +58,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
    //!menu
    const menu = document.querySelector('menu'),
-      menuItems = menu.querySelectorAll('ul>li>a');
+      menuItems = menu.querySelectorAll('ul>li>a'),
+      body = document.querySelector('body');
 
    const toggleMenu = () => {
-      const btnMenu = document.querySelector('.menu'),
-         closeBtn = document.querySelector('.close-btn');
+      const btnMenu = document.querySelector('.menu');
          
-        let count=-50,
-       intervalMenu;
+      let count = -50,
+         intervalMenu,
+         menuFlag = false;
 
       let handlerAnimate = () => {
         intervalMenu = requestAnimationFrame(handlerAnimate);
@@ -80,6 +81,8 @@ window.addEventListener('DOMContentLoaded', () => {
       let closeMenu = () => {
          menu.style.transform = `translate(-100%)`;
          count = -50;
+         menuFlag = false;
+         cancelAnimationFrame(intervalMenu);
       };
 
       let eventAnim = () => {
@@ -98,35 +101,52 @@ window.addEventListener('DOMContentLoaded', () => {
          }
       };
 
+      let selectPart = (e,animationFlag) => {
+         let target = e.target;
+
+         if (target.closest('.menu')) {
+            menuFlag = true;
+
+            if (animationFlag) {
+               eventAnim();
+            } else {
+               eventWithoutAnim();
+            }
+         } else {
+
+            if (target.closest('menu') && target.closest('A') || !target.closest('menu') && menuFlag) {
+               closeMenu();
+            }
+         }
+
+      };
+
+      let animetionEvent = (e) => {
+         selectPart(e, true);
+      };
+
+      let noAnimetionEvent = (e) => {
+         selectPart(e, false);
+      };
+
       let timoutsMenu = [];
 
       let sizeMenu = () => {
          timoutsMenu.push(setTimeout(() => {
             timoutsMenu.forEach(item => clearTimeout(item));
-            
+
             if (window.innerWidth >= 768) {
-               btnMenu.removeEventListener('click', eventWithoutAnim);
-               btnMenu.addEventListener('click', eventAnim);
+               body.addEventListener('click', animetionEvent);
+               body.removeEventListener('click', noAnimetionEvent);
             } else {
-               btnMenu.removeEventListener('click', eventAnim);
-               btnMenu.addEventListener('click', eventWithoutAnim);
+               body.addEventListener('click', noAnimetionEvent);
+               body.removeEventListener('click', animetionEvent);
             }
          }, 500));
       };
 
       window.addEventListener('resize', sizeMenu);
       window.addEventListener('load', sizeMenu);
-
-      let menuSelect = (e) => {
-         let target = e.target;
-
-         if (target.matches('A')) {
-            closeMenu();
-         }
-      };
-
-      menu.addEventListener('click', menuSelect);
-
    };
    
     toggleMenu();
