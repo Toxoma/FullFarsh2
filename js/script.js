@@ -114,11 +114,18 @@ window.addEventListener('DOMContentLoaded', () => {
          }, 500));
       };
 
-
       window.addEventListener('resize', sizeMenu);
       window.addEventListener('load', sizeMenu);
-      closeBtn.addEventListener('click', closeMenu);
-      menuItems.forEach(elem => elem.addEventListener('click', closeMenu));
+
+      let menuSelect = (e) => {
+         let target = e.target;
+
+         if (target.matches('A')) {
+            closeMenu();
+         }
+      };
+
+      menu.addEventListener('click', menuSelect);
 
    };
    
@@ -130,8 +137,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
       const popup = document.querySelector('.popup'),
          popupContent = document.querySelector('.popup-content'),
-         popupBtns = document.querySelectorAll('.popup-btn'),
-         popupClose = document.querySelector('.popup-close');
+         popupBtns = document.querySelectorAll('.popup-btn');
       
       popup.style.display = 'block';
       popup.style.transform = 'translateY(-100%)';
@@ -162,9 +168,22 @@ window.addEventListener('DOMContentLoaded', () => {
       sizePopup();
       window.addEventListener('resize', sizePopup);
 
-      popupClose.addEventListener('click', () => {
-         popup.style.transform = 'translateY(-100%)';
-         popupContent.style.transform = 'translateX(-100%)';
+      popup.addEventListener('click', (e) => {
+         let target = e.target;
+
+         const close = () => {
+            popup.style.transform = 'translateY(-100%)';
+            popupContent.style.transform = 'translateX(-100%)';
+         };
+
+         if (target.classList.contains('popup-close')) {
+            close();
+         } else {
+            target = target.closest('.popup-content');
+            if (!target) {
+              close();
+            }
+         }
       });
 
    };
@@ -202,6 +221,46 @@ window.addEventListener('DOMContentLoaded', () => {
    for (let index = 0; index < 5; index++) {
       menuItems[index].addEventListener('click', findScroll.bind(null, blocks[index]));
    }
+
+   //! табы
+   const tabs = () => {
+      
+      const tabHeader = document.querySelector('.service-header'),
+         tab = tabHeader.querySelectorAll('.service-header-tab'),
+         tabContent = document.querySelectorAll('.service-tab');
+      
+      const toggleTabContent = (index) => {
+         for (let i = 0; i < tabContent.length; i++){
+            if (index === i) {
+               tab[i].classList.add('active');
+               tabContent[i].classList.remove('d-none');
+            } else {
+               tab[i].classList.remove('active');
+               tabContent[i].classList.add('d-none');
+            }
+         }
+      };
+      
+      tabHeader.addEventListener('click', (e) => {
+         let target = e.target;
+         target = target.closest('.service-header-tab');
+
+         if (target.classList.contains('service-header-tab')) {
+               
+               tab.forEach((item, index) => {
+
+                  if (item ===target) {
+                     toggleTabContent(index);
+                  }
+
+               });
+            
+            }
+         
+      });
+   };
+
+   tabs();
 
 });
 
