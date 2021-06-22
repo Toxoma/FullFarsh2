@@ -238,7 +238,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
    scrollImg.addEventListener('click', findScroll.bind(null,blocks[0]));
    
-   for (let index = 0; index < 5; index++) {
+   for (let index = 0; index < menuItems.length; index++) {
       menuItems[index].addEventListener('click', findScroll.bind(null, blocks[index]));
    }
 
