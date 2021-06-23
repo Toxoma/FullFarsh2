@@ -422,11 +422,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
    //!questions
    const form2 = document.getElementById('form2');
-      
 
    body.addEventListener('input', (e) => {
       let target = e.target;
 
+       if (!e.data) {
+          target.value = '';
+         return;
+      }
+
+
+     
       if (target.matches('#form2-name,#form2-message,#form1-name')) {
          target.value = target.value.replace(/[^а-я\s\-]/i,'');
       } else if (target.matches('#form2-email,#form1-email')) {
