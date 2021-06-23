@@ -389,6 +389,80 @@ window.addEventListener('DOMContentLoaded', () => {
 
    slider();
 
+
+   //! comands
+   const command = document.getElementById('command'),
+      calcBlock = document.querySelector('.calc-block');
+   
+   command.addEventListener('mouseover', (e) => {
+      let target = e.target;
+
+      if (target.matches('.command__photo')) {
+         target.dataset.first = target.src;
+         target.src = target.dataset.img;
+      }
+   });
+
+   command.addEventListener('mouseout', (e) => {
+      let target = e.target;
+
+      if (target.matches('.command__photo')) {
+         target.src = target.dataset.first;
+         target.removeAttribute('data-first');
+      }
+   });
+
+   calcBlock.addEventListener('input', (e) => {
+      let target = e.target;
+
+      if (target.matches('INPUT')) {
+        target.value = target.value.replace(/\D/,'');
+      }
+   });
+
+   //!questions
+   const form2 = document.getElementById('form2');
+
+   form2.addEventListener('input', (e) => {
+      let target = e.target;
+
+      if (target.matches('#form2-name,#form2-message')) {
+         target.value = target.value.replace(/[^а-я\s\-]/i,'');
+      } else if (target.matches('#form2-email')) {
+         target.value = target.value.replace(/[^a-z\@\-\_\.\!\~\*\']/gi, '');
+         console.log(target.value);
+      } else if(target.matches('#form2-phone')) {
+         target.value = target.value.replace(/[^\d\(\)\-]/i, '');
+      }
+   });
+
+   form2.addEventListener('focusout', (e) => {
+      let target = e.target;
+
+      if (target.value) {
+         
+         if (target.matches('#form2-name,#form2-message')) {
+            target.value = target.value.replace(/^\s+|\s+$/g, '');
+            target.value = target.value.replace(/\s{2,}/g, ' ');
+         } else if (target.matches('#form2-email')) {
+            target.value = target.value.replace(/^\-+|\-+$/g, '');
+            target.value = target.value.replace(/\-{2,}/g, '-');
+            console.log(target.value);
+         } else if (target.matches('#form2-phone')) {
+            target.value = target.value.replace(/^\-+|\-+$/g, '');
+            target.value = target.value.replace(/\-{2,}/g, '-');
+         }
+      
+         if (target.matches('#form2-name')) {
+            let str = target.value;
+            str = str.split(' ');
+            str.forEach((el, id) => str[id] = el[0].toUpperCase() + el.substring(1).toLowerCase());
+            str = str.join(' ');
+            target.value = str;
+         }
+      }
+   });
+
 });
 
 
