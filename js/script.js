@@ -512,9 +512,11 @@ window.addEventListener('DOMContentLoaded', () => {
             totalValue.textContent = value;
          };
 
-         const animateInc = () => {
-            interval = requestAnimationFrame(animateInc);
-            if (value !== newValue) {
+         const animateCalc = () => {
+            interval = requestAnimationFrame(animateCalc);
+            if (!newValue) {
+               totalValue.textContent = 0;
+            } else if (value !== newValue) {
                chisla();
             } else {
                cancelAnimationFrame(interval);
@@ -522,23 +524,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
          };
 
-         const animateDec = () => {
-            interval = requestAnimationFrame(animateDec);
-
-            if (value !== newValue) {
-               chisla();
-            } else {
-               cancelAnimationFrame(interval);
-            }
-
-         };
-
-
-         if (value < newValue) {
-            interval = requestAnimationFrame(animateInc);
-         } else if (value > newValue) {
-            interval = requestAnimationFrame(animateDec);
-         }
+         interval = requestAnimationFrame(animateCalc);
 
       };
 
