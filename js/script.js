@@ -31,7 +31,12 @@ window.addEventListener('DOMContentLoaded', () => {
          minutes = putZero(minutes);
          seconds = putZero(seconds);
 
-         return { timeRemaining, seconds, minutes, hours };
+         return {
+            timeRemaining,
+            seconds,
+            minutes,
+            hours
+         };
       }
 
       let interval;
@@ -63,13 +68,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
    const toggleMenu = () => {
       const btnMenu = document.querySelector('.menu');
-         
+
       let count = -50,
          intervalMenu,
          menuFlag = false;
 
       let handlerAnimate = () => {
-        intervalMenu = requestAnimationFrame(handlerAnimate);
+         intervalMenu = requestAnimationFrame(handlerAnimate);
          if (count < 0) {
             count++;
             menu.style.transform = `translate(${count*2}%)`;
@@ -86,22 +91,22 @@ window.addEventListener('DOMContentLoaded', () => {
       };
 
       let eventAnim = () => {
-            if (menu.style.transform && menu.style.transform === `translate(0%)`) {
-               closeMenu();
-            } else {
-               intervalMenu = requestAnimationFrame(handlerAnimate);
-            }
+         if (menu.style.transform && menu.style.transform === `translate(0%)`) {
+            closeMenu();
+         } else {
+            intervalMenu = requestAnimationFrame(handlerAnimate);
+         }
       };
       let eventWithoutAnim = () => {
-            if (menu.style.transform && menu.style.transform === `translate(0%)`) {
-               closeMenu();
-            } else {
-               menu.style.transform = `translate(0%)`;
-               count = -50;
+         if (menu.style.transform && menu.style.transform === `translate(0%)`) {
+            closeMenu();
+         } else {
+            menu.style.transform = `translate(0%)`;
+            count = -50;
          }
       };
 
-      let selectPart = (e,animationFlag) => {
+      let selectPart = (e, animationFlag) => {
          let target = e.target;
 
          if (target.closest('.menu')) {
@@ -148,9 +153,9 @@ window.addEventListener('DOMContentLoaded', () => {
       window.addEventListener('resize', sizeMenu);
       window.addEventListener('load', sizeMenu);
    };
-   
-    toggleMenu();
-   
+
+   toggleMenu();
+
 
    //!popup
    const togglePopUp = () => {
@@ -158,7 +163,7 @@ window.addEventListener('DOMContentLoaded', () => {
       const popup = document.querySelector('.popup'),
          popupContent = document.querySelector('.popup-content'),
          popupBtns = document.querySelectorAll('.popup-btn');
-      
+
       popup.style.display = 'block';
       popup.style.transform = 'translateY(-100%)';
       popupContent.style.transform = 'translateX(-100%)';
@@ -173,15 +178,15 @@ window.addEventListener('DOMContentLoaded', () => {
       };
 
       let timoutsPopup = [];
-      let sizePopup= () => {
+      let sizePopup = () => {
          timoutsPopup.push(setTimeout(() => {
             timoutsPopup.forEach(item => clearTimeout(item));
-            
+
             if (window.innerWidth >= 768) {
-         popupTransition('1s');
-      } else {
-         popupTransition('');
-      }
+               popupTransition('1s');
+            } else {
+               popupTransition('');
+            }
          }, 500));
       };
 
@@ -201,7 +206,7 @@ window.addEventListener('DOMContentLoaded', () => {
          } else {
             target = target.closest('.popup-content');
             if (!target) {
-              close();
+               close();
             }
          }
       });
@@ -213,15 +218,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
    //!scroll
    const scrollImg = document.querySelector('main>a>img'),
-       blocks = document.querySelectorAll('body>div[id]:not(#companies)');
+      blocks = document.querySelectorAll('body>div[id]:not(#companies)');
    //825
 
-   let findScroll = function(value) {
+   let findScroll = function (value) {
 
 
       let count = document.documentElement.scrollTop,
          scrollInterval;
-      
+
       let animateScroll = () => {
          scrollInterval = requestAnimationFrame(animateScroll);
          if (count < value.offsetTop) {
@@ -236,21 +241,21 @@ window.addEventListener('DOMContentLoaded', () => {
 
    };
 
-   scrollImg.addEventListener('click', findScroll.bind(null,blocks[0]));
-   
+   scrollImg.addEventListener('click', findScroll.bind(null, blocks[0]));
+
    for (let index = 0; index < menuItems.length; index++) {
       menuItems[index].addEventListener('click', findScroll.bind(null, blocks[index]));
    }
 
    //! табы
    const tabs = () => {
-      
+
       const tabHeader = document.querySelector('.service-header'),
          tab = tabHeader.querySelectorAll('.service-header-tab'),
          tabContent = document.querySelectorAll('.service-tab');
-      
+
       const toggleTabContent = (index) => {
-         for (let i = 0; i < tabContent.length; i++){
+         for (let i = 0; i < tabContent.length; i++) {
             if (index === i) {
                tab[i].classList.add('active');
                tabContent[i].classList.remove('d-none');
@@ -260,23 +265,23 @@ window.addEventListener('DOMContentLoaded', () => {
             }
          }
       };
-      
+
       tabHeader.addEventListener('click', (e) => {
          let target = e.target;
          target = target.closest('.service-header-tab');
 
          if (target.classList.contains('service-header-tab')) {
-               
-               tab.forEach((item, index) => {
 
-                  if (item ===target) {
-                     toggleTabContent(index);
-                  }
+            tab.forEach((item, index) => {
 
-               });
-            
-            }
-         
+               if (item === target) {
+                  toggleTabContent(index);
+               }
+
+            });
+
+         }
+
       });
    };
 
@@ -298,7 +303,7 @@ window.addEventListener('DOMContentLoaded', () => {
       };
 
       const nextSlide = (elem, index, strClass) => {
-        elem[index].classList.add(strClass);
+         elem[index].classList.add(strClass);
       };
 
       const autoPlaySlide = () => {
@@ -306,7 +311,7 @@ window.addEventListener('DOMContentLoaded', () => {
          prevSlide(dots, currentSlide, 'dot-active');
          currentSlide++;
 
-         if (currentSlide>=slide.length) {
+         if (currentSlide >= slide.length) {
             currentSlide = 0;
          }
 
@@ -314,8 +319,8 @@ window.addEventListener('DOMContentLoaded', () => {
          nextSlide(dots, currentSlide, 'dot-active');
       };
 
-      const startSlide = (time=3000) => {
-        interval= setInterval(autoPlaySlide, time);
+      const startSlide = (time = 3000) => {
+         interval = setInterval(autoPlaySlide, time);
       };
 
       const stopSlide = () => {
@@ -334,22 +339,22 @@ window.addEventListener('DOMContentLoaded', () => {
          prevSlide(dots, currentSlide, 'dot-active');
 
          if (target.matches('#arrow-right')) {
-            currentSlide ++;
+            currentSlide++;
          } else if (target.matches('#arrow-left')) {
-            currentSlide --;
+            currentSlide--;
          } else if (target.matches('.dot')) {
             dots.forEach((elem, index) => {
-               if (elem===target) {
+               if (elem === target) {
                   currentSlide = index;
                }
             });
          }
 
-         if (currentSlide>=slide.length) {
+         if (currentSlide >= slide.length) {
             currentSlide = 0;
          }
-         if (currentSlide<0) {
-            currentSlide = slide.length-1;
+         if (currentSlide < 0) {
+            currentSlide = slide.length - 1;
          }
 
          nextSlide(slide, currentSlide, 'portfolio-item-active');
@@ -372,11 +377,11 @@ window.addEventListener('DOMContentLoaded', () => {
          for (let i = 0; i < slide.length; i++) {
             let li = document.createElement('li');
             li.classList.add('dot');
-            if (i===0) {
+            if (i === 0) {
                li.classList.add('dot-active');
             }
             portfolioDots.append(li);
-            
+
          }
 
          dots = document.querySelectorAll('.dot');
@@ -393,7 +398,7 @@ window.addEventListener('DOMContentLoaded', () => {
    //! comands
    const command = document.getElementById('command'),
       calcBlock = document.querySelector('.calc-block');
-   
+
    command.addEventListener('mouseover', (e) => {
       let target = e.target;
 
@@ -416,30 +421,27 @@ window.addEventListener('DOMContentLoaded', () => {
       let target = e.target;
 
       if (target.matches('INPUT')) {
-        target.value = target.value.replace(/\D/,'');
+         target.value = target.value.replace(/\D/, '');
       }
    });
 
    //!questions
    const form2 = document.getElementById('form2');
 
-  
-
    body.addEventListener('input', (e) => {
       let target = e.target;
 
-      console.log(e.inputType);
       if (e.inputType === 'insertFromPaste') {
-          target.value = '';
+         target.value = '';
          return;
       }
-     
+
       if (target.matches('#form2-name,#form2-message,#form1-name')) {
-         target.value = target.value.replace(/[^а-я\s\-]/i,'');
+         target.value = target.value.replace(/[^а-я\s\-]/i, '');
       } else if (target.matches('#form2-email,#form1-email')) {
          target.value = target.value.replace(/[^a-z\@\-\_\.\!\~\*\']/gi, '');
          console.log(target.value);
-      } else if(target.matches('#form2-phone,#form1-phone')) {
+      } else if (target.matches('#form2-phone,#form1-phone')) {
          target.value = target.value.replace(/[^\d\(\)\-]/i, '');
       }
    });
@@ -448,7 +450,7 @@ window.addEventListener('DOMContentLoaded', () => {
       let target = e.target;
 
       if (target.value) {
-         
+
          if (target.matches('#form2-name,#form2-message,#form1-name')) {
             target.value = target.value.replace(/^\s+|\s+$/g, '');
             target.value = target.value.replace(/\s{2,}/g, ' ');
@@ -460,7 +462,7 @@ window.addEventListener('DOMContentLoaded', () => {
             target.value = target.value.replace(/^\-+|\-+$/g, '');
             target.value = target.value.replace(/\-{2,}/g, '-');
          }
-      
+
          if (target.matches('#form2-name,#form1-name')) {
             let str = target.value;
             str = str.split(' ');
@@ -471,6 +473,48 @@ window.addEventListener('DOMContentLoaded', () => {
       }
    });
 
+   //!calculator
+   const calc = (price = 100) => {
+      const calcBlock = document.querySelector('.calc-block'),
+         calcType = document.querySelector('.calc-type'),
+         calcDay = document.querySelector('.calc-day'),
+         totalValue = document.getElementById('total'),
+         calcCount = document.querySelector('.calc-count'),
+         calcSquare = document.querySelector('.calc-square');
+
+
+      const countSum = () => {
+         let total = 0,
+            countValue = 1,
+            dayValue = 1;
+         const typeValue = calcType.options[calcType.selectedIndex].value,
+            squareValue = +calcSquare.value;
+
+         if (calcCount.value > 1) {
+            countValue += (calcCount.value - 1) / 10;
+         }
+
+         if (calcDay.value && calcDay.value < 5) {
+            dayValue *= 2;
+         } else if (calcDay.value && calcDay.value < 10) {
+            dayValue *= 1.5;
+         }
+
+         if (typeValue && squareValue) {
+            total = price * typeValue * squareValue * countValue * dayValue;
+         }
+
+         totalValue.textContent = total;
+      };
+
+      calcBlock.addEventListener('change', (e) => {
+         let target = e.target;
+
+         if (target.matches('.calc-type, .calc-day, .calc-count, .calc-square')) {
+            countSum();
+         }
+      });
+   };
+
+   calc(100);
 });
-
-
