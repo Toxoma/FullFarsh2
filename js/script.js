@@ -481,7 +481,66 @@ window.addEventListener('DOMContentLoaded', () => {
          totalValue = document.getElementById('total'),
          calcCount = document.querySelector('.calc-count'),
          calcSquare = document.querySelector('.calc-square');
+      let interval;
 
+      const animation = (value, newValue) => {
+         cancelAnimationFrame(interval);
+
+
+         const chisla = () => {
+
+            if (value < newValue && (newValue - value) > 200) {
+               console.log(1);
+               value = +value + 100;
+            } else if (value < newValue && (newValue - value) > 20) {
+               console.log(2);
+               value = +value + 10;
+            } else if (value < newValue && (newValue - value) <= 20) {
+               console.log(3);
+               value++;
+            } else if (value > newValue && (value - newValue) > 200) {
+               console.log(1);
+               value -= 100;
+            } else if (value > newValue && (value - newValue) > 20) {
+               console.log(2);
+               value -= 10;
+            } else if (value > newValue && (value - newValue) <= 20) {
+               console.log(3);
+               value--;
+            }
+
+            totalValue.textContent = value;
+         };
+
+         const animateInc = () => {
+            interval = requestAnimationFrame(animateInc);
+            if (value !== newValue) {
+               chisla();
+            } else {
+               cancelAnimationFrame(interval);
+            }
+
+         };
+
+         const animateDec = () => {
+            interval = requestAnimationFrame(animateDec);
+
+            if (value !== newValue) {
+               chisla();
+            } else {
+               cancelAnimationFrame(interval);
+            }
+
+         };
+
+
+         if (value < newValue) {
+            interval = requestAnimationFrame(animateInc);
+         } else if (value > newValue) {
+            interval = requestAnimationFrame(animateDec);
+         }
+
+      };
 
       const countSum = () => {
          let total = 0,
@@ -504,7 +563,7 @@ window.addEventListener('DOMContentLoaded', () => {
             total = price * typeValue * squareValue * countValue * dayValue;
          }
 
-         totalValue.textContent = total;
+         animation(totalValue.textContent, total);
       };
 
       calcBlock.addEventListener('change', (e) => {
@@ -514,6 +573,7 @@ window.addEventListener('DOMContentLoaded', () => {
             countSum();
          }
       });
+
    };
 
    calc(100);
