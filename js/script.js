@@ -426,7 +426,6 @@ window.addEventListener('DOMContentLoaded', () => {
    });
 
    //!questions
-   const form2 = document.getElementById('form2');
 
    body.addEventListener('input', (e) => {
       let target = e.target;
@@ -440,7 +439,6 @@ window.addEventListener('DOMContentLoaded', () => {
          target.value = target.value.replace(/[^а-я\s\-]/i, '');
       } else if (target.matches('#form2-email,#form1-email')) {
          target.value = target.value.replace(/[^a-z\@\-\_\.\!\~\*\']/gi, '');
-         console.log(target.value);
       } else if (target.matches('#form2-phone,#form1-phone')) {
          target.value = target.value.replace(/[^\d\(\)\-]/i, '');
       }
@@ -457,13 +455,12 @@ window.addEventListener('DOMContentLoaded', () => {
          } else if (target.matches('#form2-email,#form1-email')) {
             target.value = target.value.replace(/^\-+|\-+$/g, '');
             target.value = target.value.replace(/\-{2,}/g, '-');
-            console.log(target.value);
          } else if (target.matches('#form2-phone,#form1-phone')) {
             target.value = target.value.replace(/^\-+|\-+$/g, '');
             target.value = target.value.replace(/\-{2,}/g, '-');
          }
 
-         if (target.matches('#form2-name,#form1-name')) {
+         if (target.matches('#form2-name,#form1-name') && target.value) {
             let str = target.value;
             str = str.split(' ');
             str.forEach((el, id) => str[id] = el[0].toUpperCase() + el.substring(1).toLowerCase());
