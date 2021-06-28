@@ -96,7 +96,7 @@ class Validator {
 
    setPattern() {
       if (!this.pattern.name) {
-         this.pattern.name = /^[а-я]+(\s[а-я]+)?$/i;
+         this.pattern.name = /^([а-я]){3,}(\s[а-я]{3,})?$/i;
       }
       if (!this.pattern.message) {
          this.pattern.message = /[а-я\d]+/i;

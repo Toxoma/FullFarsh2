@@ -598,6 +598,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
             clearInput(form);
 
+            setTimeout(() => {
+               loadIconDiv.textContent = '';
+            }, 3000);
+
          });
 
          request.open('POST', './server.php');
