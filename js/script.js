@@ -566,13 +566,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
    //! send-ajax-form
    const sendForm = () => {
-      const errorMessage = 'Что-то пошло не так...',
-         loadMessage = 'Загрузка...',
-         successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
       const form = document.querySelectorAll('form');
-      const statusMessage = document.createElement('div');
+      const loadIconDiv = document.createElement('div');
 
-      statusMessage.style.cssText = 'font-size:2rem; color:white;';
+      const successMessage = 'Спасибо! Скоро рассмотрим вашу заявку!',
+         errorMessage = 'Ой что-то пошло не так!';
 
       const clearInput = (form) => {
          const inputs = form.querySelectorAll('input');
@@ -588,6 +586,9 @@ window.addEventListener('DOMContentLoaded', () => {
             if (request.readyState !== 4) {
                return;
             }
+
+            loadIconDiv.classList.remove('sk-fading-circle');
+            loadIconDiv.classList.add('loadIconText');
 
             if (request.status === 200) {
                outputData();
@@ -608,8 +609,22 @@ window.addEventListener('DOMContentLoaded', () => {
       form.forEach(el => {
          el.addEventListener('submit', (e) => {
             e.preventDefault();
-            el.appendChild(statusMessage);
-            statusMessage.textContent = loadMessage;
+
+            if (loadIconDiv) {
+               loadIconDiv.textContent = '';
+            }
+
+            loadIconDiv.classList.remove('loadIconText');
+            loadIconDiv.classList.add('sk-fading-circle');
+
+            for (let i = 1; i < 13; i++) {
+               const innerDiv = document.createElement('div');
+               innerDiv.classList.add(`sk-circle`);
+               innerDiv.classList.add(`sk-circle-${i}`);
+               loadIconDiv.insertAdjacentElement('beforeend', innerDiv);
+            }
+            el.appendChild(loadIconDiv);
+            console.log(el);
 
             const formData = new FormData(el);
             let body = {};
@@ -620,10 +635,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
             postData(body,
                () => {
-                  statusMessage.textContent = successMessage;
+                  loadIconDiv.textContent = successMessage;
                },
                (err) => {
-                  statusMessage.textContent = errorMessage;
+                  loadIconDiv.textContent = errorMessage;
                   console.error(err);
                },
                el);
