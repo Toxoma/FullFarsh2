@@ -435,12 +435,14 @@ window.addEventListener('DOMContentLoaded', () => {
          return;
       }
 
-      if (target.matches('#form2-name,#form2-message,#form1-name')) {
+      if (target.matches('#form2-name,#form1-name')) {
          target.value = target.value.replace(/[^а-я\s\-]/i, '');
       } else if (target.matches('#form2-email,#form1-email')) {
          target.value = target.value.replace(/[^a-z\@\-\_\.\!\~\*\']/gi, '');
       } else if (target.matches('#form2-phone,#form1-phone')) {
-         target.value = target.value.replace(/[^\d\(\)\-]/i, '');
+         target.value = target.value.replace(/[^\d\+]/g, '');
+      } else if ('#form2-message') {
+         target.value = target.value.replace(/[^а-я\s\d\.\,\?\!\;\:\(\)\"\-]/i, '');
       }
    });
 
@@ -455,10 +457,11 @@ window.addEventListener('DOMContentLoaded', () => {
          } else if (target.matches('#form2-email,#form1-email')) {
             target.value = target.value.replace(/^\-+|\-+$/g, '');
             target.value = target.value.replace(/\-{2,}/g, '-');
-         } else if (target.matches('#form2-phone,#form1-phone')) {
-            target.value = target.value.replace(/^\-+|\-+$/g, '');
-            target.value = target.value.replace(/\-{2,}/g, '-');
          }
+         // else if (target.matches('#form2-phone,#form1-phone')) {
+         //    target.value = target.value.replace(/^\-+|\-+$/g, '');
+         //    target.value = target.value.replace(/\-{2,}/g, '-');
+         // }
 
          if (target.matches('#form2-name,#form1-name') && target.value) {
             let str = target.value;
@@ -561,33 +564,96 @@ window.addEventListener('DOMContentLoaded', () => {
 
    calc(100);
 
-
    //! send-ajax-form
    const sendForm = () => {
-      const errorMessage = 'Что-то пошло не так...',
-         loadMessage = 'Загрузка...',
-         successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
-      const form = document.getElementById('form1');
-      const statusMessage = document.createElement('div');
+      const form = document.querySelectorAll('form');
+      const loadIconDiv = document.createElement('div');
 
-      statusMessage.style.cssText = 'font-size:2rem;';
+      const successMessage = 'Спасибо! Скоро рассмотрим вашу заявку!',
+         errorMessage = 'Ой что-то пошло не так!';
 
-      form.addEventListener('submit', (e) => {
-         e.preventDefault();
-         form.appendChild(statusMessage);
+      const clearInput = (form) => {
+         const inputs = form.querySelectorAll('input');
+         inputs.forEach(input => {
+            input.value = '';
+         });
+      };
 
-         const request = new XMLHttpRequest();
-         request.open('POST', '../server.php');
-         request.setRequestHeader('Content-Type', 'multipart/form-data');
+      const loadReqText = (data) => {
+         loadIconDiv.textContent = data;
+      };
 
-         const formData = new FormData(form);
-         console.log(formData);
+      const postData = (body, form) => {
+         const promise = new Promise((resolve, reject) => {
+            const request = new XMLHttpRequest();
 
-         request.send(formData);
+            request.addEventListener('readystatechange', () => {
+               if (request.readyState !== 4) {
+                  return;
+               }
 
+               loadIconDiv.classList.remove('sk-fading-circle');
+               loadIconDiv.classList.add('loadIconText');
 
+               if (request.status === 200) {
+                  resolve(successMessage);
+               } else {
+                  reject([request.response, errorMessage]);
+               }
+
+               setTimeout(() => {
+                  loadIconDiv.textContent = '';
+               }, 3000);
+
+            });
+
+            request.open('POST', './server.php');
+            request.setRequestHeader('Content-Type', 'application/json');
+
+            request.send(JSON.stringify(body));
+         });
+
+         promise
+            .then(loadReqText)
+            .then(clearInput(form))
+            .catch((err) => {
+               console.error(err[0]);
+               loadReqText(err[1]);
+            });
+      };
+
+      form.forEach(el => {
+         el.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (loadIconDiv) {
+               loadIconDiv.textContent = '';
+            }
+
+            loadIconDiv.classList.remove('loadIconText');
+            loadIconDiv.classList.add('sk-fading-circle');
+
+            for (let i = 1; i < 13; i++) {
+               const innerDiv = document.createElement('div');
+               innerDiv.classList.add(`sk-circle`);
+               innerDiv.classList.add(`sk-circle-${i}`);
+               loadIconDiv.insertAdjacentElement('beforeend', innerDiv);
+            }
+            el.appendChild(loadIconDiv);
+
+            const formData = new FormData(el);
+            let body = {};
+
+            formData.forEach((val, key) => {
+               body[key] = val;
+            });
+
+            postData(body, el);
+         });
       });
    };
 
    sendForm();
+
+
 });

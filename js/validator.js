@@ -21,7 +21,6 @@ class Validator {
       this.setPattern();
       this.elementsForm.forEach(elem => elem.addEventListener('change', this.checkIt.bind(this)));
       this.form.addEventListener('submit', e => {
-
          this.elementsForm.forEach(elem => this.checkIt({
             target: elem
          }));
@@ -73,23 +72,11 @@ class Validator {
    showError(elem) {
       elem.classList.remove('success');
       elem.classList.add('error');
-
-      // if (elem.nextElementSibling && elem.nextElementSibling.classList.contains('validator-error')) {
-      //    return;
-      // }
-
-      // const errorDiv = document.createElement('div');
-      // errorDiv.textContent = 'Ошибка в этом поле';
-      // errorDiv.classList.add('validator-error');
-      // elem.insertAdjacentElement('afterend', errorDiv);
    }
 
    showSuccess(elem) {
       elem.classList.remove('error');
       elem.classList.add('success');
-      // if (elem.nextElementSibling && elem.nextElementSibling.classList.contains('validator-error')) {
-      //    elem.nextElementSibling.remove();
-      // }
    }
 
    applyStyle() {
@@ -109,13 +96,13 @@ class Validator {
 
    setPattern() {
       if (!this.pattern.name) {
-         this.pattern.name = /^[а-я]+(\s[а-я]+)?$/i;
+         this.pattern.name = /^([а-я]){3,}(\s[а-я]{3,})?$/i;
       }
       if (!this.pattern.message) {
-         this.pattern.message = /[а-я]+/i;
+         this.pattern.message = /[а-я\d]+/i;
       }
       if (!this.pattern.phone) {
-         this.pattern.phone = /^(\d){11}$/;
+         this.pattern.phone = /^(\+7|8)\d{10}/;
       }
       if (!this.pattern.email) {
          this.pattern.email = /^\w+@\w+\.\w{2,}$/;
