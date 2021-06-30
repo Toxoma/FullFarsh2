@@ -13,6 +13,10 @@ class Validator {
          return item.tagName.toLowerCase() !== 'button' &&
             item.type !== 'button';
       });
+      this.subBtn = [...this.form.elements].filter(item => {
+         return item.tagName.toLowerCase() === 'button' &&
+            item.type === 'submit';
+      })[0];
       this.error = new Set();
    }
 
@@ -24,9 +28,12 @@ class Validator {
          this.elementsForm.forEach(elem => this.checkIt({
             target: elem
          }));
-
+         
          if (this.error.size) {
             e.preventDefault();
+            this.subBtn.classList.add('cancel');
+         }else{
+            this.subBtn.classList.remove('cancel');
          }
       });
    }

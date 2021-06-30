@@ -435,11 +435,11 @@ window.addEventListener('DOMContentLoaded', () => {
          return;
       }
 
-      if (target.matches('#form2-name,#form1-name')) {
+      if (target.matches('#form2-name,#form1-name,#form3-name')) {
          target.value = target.value.replace(/[^а-я\s\-]/i, '');
-      } else if (target.matches('#form2-email,#form1-email')) {
-         target.value = target.value.replace(/[^a-z\@\-\_\.\!\~\*\']/gi, '');
-      } else if (target.matches('#form2-phone,#form1-phone')) {
+      } else if (target.matches('#form2-email,#form1-email,#form3-email')) {
+         target.value = target.value.replace(/[^a-z\d\@\-\_\.\!\~\*\']/gi, '');
+      } else if (target.matches('#form2-phone,#form1-phone,#form3-phone')) {
          target.value = target.value.replace(/[^\d\+]/g, '');
       } else if ('#form2-message') {
          target.value = target.value.replace(/[^а-я\s\d\.\,\?\!\;\:\(\)\"\-]/i, '');
@@ -458,10 +458,6 @@ window.addEventListener('DOMContentLoaded', () => {
             target.value = target.value.replace(/^\-+|\-+$/g, '');
             target.value = target.value.replace(/\-{2,}/g, '-');
          }
-         // else if (target.matches('#form2-phone,#form1-phone')) {
-         //    target.value = target.value.replace(/^\-+|\-+$/g, '');
-         //    target.value = target.value.replace(/\-{2,}/g, '-');
-         // }
 
          if (target.matches('#form2-name,#form1-name') && target.value) {
             let str = target.value;
@@ -576,6 +572,7 @@ window.addEventListener('DOMContentLoaded', () => {
          const inputs = form.querySelectorAll('input');
          inputs.forEach(input => {
             input.value = '';
+            input.classList.remove('success');
          });
       };
 
@@ -597,46 +594,57 @@ window.addEventListener('DOMContentLoaded', () => {
          el.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            if (loadIconDiv) {
-               loadIconDiv.textContent = '';
-            }
+            setTimeout(()=>{
 
-            loadIconDiv.classList.remove('loadIconText');
-            loadIconDiv.classList.add('sk-fading-circle');
-
-            for (let i = 1; i < 13; i++) {
-               const innerDiv = document.createElement('div');
-               innerDiv.classList.add(`sk-circle`);
-               innerDiv.classList.add(`sk-circle-${i}`);
-               loadIconDiv.insertAdjacentElement('beforeend', innerDiv);
-            }
-            el.appendChild(loadIconDiv);
-
-            const formData = new FormData(el);
-            let body = {};
-
-            formData.forEach((val, key) => {
-               body[key] = val;
-            });
-
-            postData(body)
-               .then((response) => {
-                  if (response.status !== 200) {
-                     console.log('!');
-                     throw new Error('status network not 200');
-                  }
-                  loadIconDiv.classList.remove('sk-fading-circle');
-                  loadIconDiv.classList.add('loadIconText');
-                  loadReqText(successMessage);
-                  clearInput(el);
-                  setTimeout(() => {
-                     loadIconDiv.textContent = '';
-                  }, 3000);
-               })
-               .catch(err => {
-                  console.error(err);
-                  loadReqText(errorMessage);
+               const subBtn = el.querySelector('.form-btn');
+               console.log(subBtn);
+               if (subBtn.classList.contains('cancel')) {
+                  return;
+               }
+   
+               if (loadIconDiv) {
+                  loadIconDiv.textContent = '';
+               }
+   
+               loadIconDiv.classList.remove('loadIconText');
+               loadIconDiv.classList.add('sk-fading-circle');
+   
+               for (let i = 1; i < 13; i++) {
+                  const innerDiv = document.createElement('div');
+                  innerDiv.classList.add(`sk-circle`);
+                  innerDiv.classList.add(`sk-circle-${i}`);
+                  loadIconDiv.insertAdjacentElement('beforeend', innerDiv);
+               }
+               el.appendChild(loadIconDiv);
+   
+               const formData = new FormData(el);
+               let body = {};
+   
+               formData.forEach((val, key) => {
+                  body[key] = val;
                });
+   
+               postData(body)
+                  .then((response) => {
+                     if (response.status !== 200) {
+                        console.log('!');
+                        throw new Error('status network not 200');
+                     }
+                     loadIconDiv.classList.remove('sk-fading-circle');
+                     loadIconDiv.classList.add('loadIconText');
+                     loadReqText(successMessage);
+                     clearInput(el);
+                     setTimeout(() => {
+                        loadIconDiv.textContent = '';
+                     }, 3000);
+                  })
+                  .catch(err => {
+                     console.error(err);
+                     loadReqText(errorMessage);
+                  });
+
+            },500);
+           
          });
       });
    };
