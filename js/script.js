@@ -583,43 +583,14 @@ window.addEventListener('DOMContentLoaded', () => {
          loadIconDiv.textContent = data;
       };
 
-      const postData = (body, form) => {
-         const promise = new Promise((resolve, reject) => {
-            const request = new XMLHttpRequest();
-
-            request.addEventListener('readystatechange', () => {
-               if (request.readyState !== 4) {
-                  return;
-               }
-
-               loadIconDiv.classList.remove('sk-fading-circle');
-               loadIconDiv.classList.add('loadIconText');
-
-               if (request.status === 200) {
-                  resolve(successMessage);
-               } else {
-                  reject([request.response, errorMessage]);
-               }
-
-               setTimeout(() => {
-                  loadIconDiv.textContent = '';
-               }, 3000);
-
-            });
-
-            request.open('POST', './server.php');
-            request.setRequestHeader('Content-Type', 'application/json');
-
-            request.send(JSON.stringify(body));
+      const postData = (body) => {
+         return fetch('./server.php', {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
          });
-
-         promise
-            .then(loadReqText)
-            .then(clearInput(form))
-            .catch((err) => {
-               console.error(err[0]);
-               loadReqText(err[1]);
-            });
       };
 
       form.forEach(el => {
@@ -648,12 +619,26 @@ window.addEventListener('DOMContentLoaded', () => {
                body[key] = val;
             });
 
-            postData(body, el);
+            postData(body)
+               .then((response) => {
+                  if (response.status !== 200) {
+                     console.log('!');
+                     throw new Error('status network not 200');
+                  }
+                  loadIconDiv.classList.remove('sk-fading-circle');
+                  loadIconDiv.classList.add('loadIconText');
+                  loadReqText(successMessage);
+                  clearInput(el);
+                  setTimeout(() => {
+                     loadIconDiv.textContent = '';
+                  }, 3000);
+               })
+               .catch(err => {
+                  console.error(err);
+                  loadReqText(errorMessage);
+               });
          });
       });
    };
-
    sendForm();
-
-
 });
