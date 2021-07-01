@@ -1,0 +1,19 @@
+//! comands
+
+//! send-ajax-form
+
+//! табы
+
+//!calculator
+
+//!menu
+
+//!popup
+
+//!questions
+
+//!scroll
+
+//!slaider
+
+//!timer
