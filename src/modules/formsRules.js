@@ -33,7 +33,7 @@ const formsRules = () => {
                 target.value = target.value.replace(/\-{2,}/g, '-');
             }
 
-            if (target.matches('#form2-name,#form1-name') && target.value) {
+            if (target.matches('#form2-name,#form1-name,#form3-name') && target.value) {
                 let str = target.value;
                 str = str.split(' ');
                 str.forEach((el, id) => str[id] = el[0].toUpperCase() + el.substring(1).toLowerCase());

@@ -2,7 +2,8 @@ const togglePopUp = () => {
 
     const popup = document.querySelector('.popup'),
         popupContent = document.querySelector('.popup-content'),
-        popupBtns = document.querySelectorAll('.popup-btn');
+        popupBtns = document.querySelectorAll('.popup-btn'),
+        inputs = popupContent.querySelectorAll('input');
 
     popup.style.display = 'block';
     popup.style.transform = 'translateY(-100%)';
@@ -14,6 +15,11 @@ const togglePopUp = () => {
         popupBtns.forEach(btn => btn.addEventListener('click', () => {
             popupContent.style.transform = 'translateX(0%)';
             popup.style.transform = 'translateY(0%)';
+            inputs.forEach(input => {
+                input.value = '';
+                input.classList.remove('success');
+                input.classList.remove('error');
+            });
         }));
     };
 
@@ -21,7 +27,6 @@ const togglePopUp = () => {
     const sizePopup = () => {
         timoutsPopup.push(setTimeout(() => {
             timoutsPopup.forEach(item => clearTimeout(item));
-            console.log(window.innerWidth);
             if (window.innerWidth >= 768) {
                 popupTransition('1s');
             } else {
