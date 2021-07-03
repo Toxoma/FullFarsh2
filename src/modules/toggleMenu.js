@@ -74,7 +74,6 @@ const toggleMenu = () => {
     const sizeMenu = () => {
         timoutsMenu.push(setTimeout(() => {
             timoutsMenu.forEach(item => clearTimeout(item));
-
             if (window.innerWidth >= 768) {
                 body.addEventListener('click', animetionEvent);
                 body.removeEventListener('click', noAnimetionEvent);

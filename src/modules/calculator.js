@@ -10,27 +10,13 @@ const calc = (price = 100) => {
     const animation = (value, newValue) => {
         cancelAnimationFrame(interval);
 
+        let  summa = Math.abs(newValue - value) / 20;
 
         const chisla = () => {
-
-            if (value < newValue && (newValue - value) > 200) {
-                console.log(1);
-                value = +value + 100;
-            } else if (value < newValue && (newValue - value) > 20) {
-                console.log(2);
-                value = +value + 10;
-            } else if (value < newValue && (newValue - value) <= 20) {
-                console.log(3);
-                value++;
-            } else if (value > newValue && (value - newValue) > 200) {
-                console.log(1);
-                value -= 100;
-            } else if (value > newValue && (value - newValue) > 20) {
-                console.log(2);
-                value -= 10;
-            } else if (value > newValue && (value - newValue) <= 20) {
-                console.log(3);
-                value--;
+            if (value < newValue) {
+                value = +value + summa;
+            } else {
+                value = +value - summa;
             }
 
             totalValue.textContent = value;
