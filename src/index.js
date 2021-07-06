@@ -10,6 +10,7 @@ import commandBlock from './modules/commandBlock';
 import formsRules from './modules/formsRules';
 import calc from './modules/calculator';
 import sendForm from './modules/sendForm';
+// import carusel from './modules/carusel';
 
 //!timer
 countTimer('18 june 2023');
@@ -40,3 +41,4 @@ calc(100);
 
 //! send-ajax-form
 sendForm();
+
